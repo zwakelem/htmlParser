@@ -53,7 +53,7 @@ public class ParserMain {
 			for(Element header: headerElements) {
 				Element tableElement = header.nextElementSibling();
 				List<String> techs = getTechnologiesForArea(tableElement);
-				jsonMap.put(header.text(), techs.toArray());
+				jsonMap.put(header.text(), techs);
 			}
 		} else {
 			System.err.println("Could not find expected root element");
