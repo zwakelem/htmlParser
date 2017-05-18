@@ -28,7 +28,7 @@ public class ParserMain {
 		if(isUrlValid(urlString)) {
 			initialise(urlString);
 			parseHtmlToMap();
-			convertMapToJsonAndWriteToConsole(jsonMap);
+			System.out.println(convertMapToJsonAndWriteToConsole(jsonMap));
 		} else {
 			System.err.println("URL invalid or null");
 		}
@@ -60,12 +60,13 @@ public class ParserMain {
 		}
 	}
 
-	private static void convertMapToJsonAndWriteToConsole(Map<String, Object> jsonMap) {
+	private static String convertMapToJsonAndWriteToConsole(Map<String, Object> jsonMap) {
+		String mapInJsonFormat = null;
 		if(jsonMap != null && !jsonMap.isEmpty()) {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				JsonNode jsonNode = mapper.convertValue(jsonMap, JsonNode.class);
-				System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode));
+				mapInJsonFormat = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
 			} catch (JsonGenerationException e) {
 				e.printStackTrace();
 			} catch (JsonMappingException e) {
@@ -76,6 +77,7 @@ public class ParserMain {
 		} else {
 			System.err.println("json Map is null or empty");
 		}
+		return mapInJsonFormat;
 	}
 	
 	private static Elements headersAsElements() {
