@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.codehaus.jackson.JsonGenerationException;
@@ -19,7 +20,7 @@ import org.jsoup.select.Elements;
 public class ParserMain {
 	
 	private static Element rootElement;
-	private static Map<String, Object> jsonMap = new LinkedHashMap<>();
+	private static Map<String, Object> jsonMap = new ConcurrentHashMap<>();
 	
 
 	public static void main(String[] args) {
@@ -38,7 +39,7 @@ public class ParserMain {
 		return new UrlValidator().isValid(urlString);
 	}
 	
-	private static void initialise(String urlString) {
+	private static synchronized void initialise(String urlString) {
 		try {
 			Document doc = Jsoup.connect(urlString).get();
 			rootElement = doc.select("article").first();
@@ -47,7 +48,7 @@ public class ParserMain {
 		}
 	}
 	
-	private static void parseHtmlToMap() {
+	private static synchronized void parseHtmlToMap() {
 		if(rootElement != null) {
 			Elements headerElements = headersAsElements();
 			for(Element header: headerElements) {
